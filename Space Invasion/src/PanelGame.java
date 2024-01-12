@@ -1,5 +1,5 @@
 import java.awt.event.MouseListener;
-
+import java.awt.*;
 import javax.swing.JComponent;
 
 import java.awt.event.MouseEvent;
@@ -104,7 +104,7 @@ public void start() {
         g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        img = new ImageIcon(getClass().getResource("/image/bitmap.png")).getImage();
+      //  img = new ImageIcon(getClass().getResource("/image/bitmap.png")).getImage();
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
