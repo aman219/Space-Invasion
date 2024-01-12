@@ -1,14 +1,15 @@
 import java.awt.event.MouseListener;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.JComponent;
-
 import java.awt.event.MouseEvent;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-
 import javax.swing.ImageIcon;
 
 public class PanelGame extends JComponent {
@@ -16,7 +17,7 @@ public class PanelGame extends JComponent {
     private static final long serialVersionUID = 1L;
 	private Graphics2D g2;
     private BufferedImage image;
-    private Image img;
+    private Image img, p1, p2;
     private int width;
     private int height;
     private Thread thread;
@@ -95,14 +96,16 @@ public class PanelGame extends JComponent {
 				return mat[0][2];
     	return 0;
     }
-public void start() {
+    public void start() {
         width = getWidth();
         height = getHeight();
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-      //img = new ImageIcon(getClass().getResource("/image/bitmap.png")).getImage();
+        img = new ImageIcon(getClass().getResource("/image/GRID.png")).getImage();
+        p1 = new ImageIcon(getClass().getResource("/image/O.png")).getImage();
+        p2 = new ImageIcon(getClass().getResource("/image/X.png")).getImage();
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -124,11 +127,12 @@ public void start() {
         thread.start();
         
     }
-private void drawBackground() {
-        g2.setColor(new Color(102, 255, 102));
+	private void drawBackground() {
+        g2.setColor(new Color(25, 25, 25));
         g2.fillRect(0, 0, width, height);
-    }
-private int[] winnerCord()
+		g2.drawImage(img, -10, -29, null);
+	}
+	private int[] winnerCord()
     {
     	int arr[] = new int[4];
     	for (int i=0; i<3; i++)
@@ -176,26 +180,18 @@ private int[] winnerCord()
     private void drawGame() {
     	g2.setColor(Color.WHITE);
     	g2.setStroke(new BasicStroke(3.0f));
-    	int thickness = 5;
     	int w = width/3;
     	int h = height/3;
-    	for (int i=1; i<=2; i++)
-    	{
-    		g2.fillRect(w*i, 0, thickness, height);
-    		g2.fillRect(0, h*i, width, thickness);
-    	}
     	
     	for (int i=0; i<3; i++)
     	{
     		for (int j=0; j<3; j++)
     		{
     			if (mat[i][j] == 1) {
-    				g2.drawOval(w*i+10, h*j+27, w-15, w-15);
+    				g2.drawImage(p1, w*i+10, h*j+27, null);
     			}
     			else if (mat[i][j] == 2) {
-    				int aspect = 15;
-    				g2.drawLine(w*i+20, h*j+20+aspect, (w*i)+w-20, (h*j)+h-20-aspect);
-    				g2.drawLine(w*i+20, h*j+h-20-aspect, (w*i)+w-20, h*j+20+aspect);
+    				g2.drawImage(p2, w*i+10, h*j+27, null);
     			}
     		}
     	}
@@ -204,27 +200,27 @@ private int[] winnerCord()
     	if (win != 0)
     	{
  
-    		g2.setColor(new Color(255, 10, 25));
+    		g2.setColor(new Color(200, 150, 205));
     		Font font = new Font("Serif", Font.PLAIN, 48);
     		g2.setFont(font);
     		int cord[] = winnerCord();
     		
     		g2.drawLine(cord[0]*w+w/2, cord[1]*h+h/2, cord[2]*w+w/2, cord[3]*h+h/2);
     		
-    		g2.setColor(new Color(0, 0, 102));
+    		g2.setColor(new Color(102, 255, 102));
     		g2.drawString(win==1?"player1 Win":"Player2 Win", width/2-110, height/2);
     		start = false;
     	}
     	if (cnt == 9 && win == 0)
     	{
-    		g2.setColor(new Color(255, 0, 0));
+    		g2.setColor(new Color(102, 255, 102));
     		Font font = new Font("Serif", Font.PLAIN, 48);
     		g2.setFont(font);
     		g2.drawString("DRAW", width/2-70, height/2);
     		start = false;
     	}
     	
-    	g2.drawImage(img, 0, 0, null);
+    	
         
     }
 
