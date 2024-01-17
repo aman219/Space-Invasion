@@ -1,7 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 
 public class Main extends JFrame {
@@ -17,10 +19,11 @@ public class Main extends JFrame {
         setSize(380, 540);
         setLocationRelativeTo(null);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         PanelGame panelGame = new PanelGame();
         add(panelGame);
+        panelGame.setJFrame(this);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -28,7 +31,7 @@ public class Main extends JFrame {
             }
         });
     }
-    
+
     public static void main(String[] args) {
         Main main = new Main();
         main.setVisible(true);

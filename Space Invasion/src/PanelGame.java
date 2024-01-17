@@ -1,16 +1,17 @@
-import java.awt.event.MouseListener;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import javax.swing.JComponent;
-import java.awt.event.MouseEvent;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 public class PanelGame extends JComponent {
     //instance variable
@@ -26,11 +27,12 @@ public class PanelGame extends JComponent {
     private int mat[][] = new int[3][3];
     private boolean turn = true;
     static int cnt = 0;
+    private JFrame frame;
     //  Game FPS
     private final int FPS = 60;
     private final int TARGET_TIME = 1000000000 / FPS;
 
-    
+
     private void initMouse() {
     	addMouseListener(new MouseListener() {
 			@Override
@@ -39,19 +41,21 @@ public class PanelGame extends JComponent {
 				mouseY = e.getY();
 				int i = mouseX/(width/3);
 				int j = mouseY/(height/3);
-				
+
 				if (mat[i][j] == 0)
 				{
 					if (turn) {
 						mat[i][j] = 1;
 						turn = false;
+						frame.setTitle("Player 2 turn");
 					}else {
 						mat[i][j] = 2;
 						turn = true;
+						frame.setTitle("Player 1 turn");
 					}
 					cnt++;
 				}
-				System.out.println("Clicked at : "+i+" "+j+"mat : "+mat[i][j]);
+				
 			}
 
 			@Override
@@ -81,19 +85,27 @@ public class PanelGame extends JComponent {
     {
     	for (int i=0; i<3; i++)
     	{
-    		if (mat[i][0] == mat[i][1] && mat[i][1] == mat[i][2])
-    			if (mat[i][0] != 0)
-    				return mat[i][0];
-    		if (mat[0][i] == mat[1][i] && mat[1][i] == mat[2][i])
-    			if (mat[0][i] != 0)
-    				return mat[0][i];
+    		if (mat[i][0] == mat[i][1] && mat[i][1] == mat[i][2]) {
+				if (mat[i][0] != 0) {
+					return mat[i][0];
+				}
+			}
+    		if (mat[0][i] == mat[1][i] && mat[1][i] == mat[2][i]) {
+				if (mat[0][i] != 0) {
+					return mat[0][i];
+				}
+			}
     	}
-    	if (mat[0][0] == mat[1][1] && mat[1][1] == mat[2][2])
-    		if (mat[0][0] != 0)
+    	if (mat[0][0] == mat[1][1] && mat[1][1] == mat[2][2]) {
+			if (mat[0][0] != 0) {
 				return mat[0][0];
-    	if (mat[0][2] == mat[1][1] && mat[1][1] == mat[2][0])
-    		if (mat[0][2] != 0)
+			}
+		}
+    	if (mat[0][2] == mat[1][1] && mat[1][1] == mat[2][0]) {
+			if (mat[0][2] != 0) {
 				return mat[0][2];
+			}
+		}
     	return 0;
     }
     public void start() {
@@ -125,7 +137,7 @@ public class PanelGame extends JComponent {
 
         initMouse();
         thread.start();
-        
+
     }
 	private void drawBackground() {
         g2.setColor(new Color(25, 25, 25));
@@ -137,8 +149,8 @@ public class PanelGame extends JComponent {
     	int arr[] = new int[4];
     	for (int i=0; i<3; i++)
     	{
-    		if (mat[i][0] == mat[i][1] && mat[i][1] == mat[i][2])
-    			if (mat[i][0] != 0)
+    		if (mat[i][0] == mat[i][1] && mat[i][1] == mat[i][2]) {
+				if (mat[i][0] != 0)
     			{
     				arr[0] = i;
     				arr[1] = 0;
@@ -146,8 +158,9 @@ public class PanelGame extends JComponent {
     				arr[3] = 2;
     				return arr;
     			}
-    		if (mat[0][i] == mat[1][i] && mat[1][i] == mat[2][i])
-    			if (mat[0][i] != 0)
+			}
+    		if (mat[0][i] == mat[1][i] && mat[1][i] == mat[2][i]) {
+				if (mat[0][i] != 0)
     			{
     				arr[0] = 0;
     				arr[1] = i;
@@ -155,17 +168,19 @@ public class PanelGame extends JComponent {
     				arr[3] = i;
     				return arr;
     			}
-	    	if (mat[0][0] == mat[1][1] && mat[1][1] == mat[2][2])
-	    		if (mat[0][i] != 0)
+			}
+	    	if (mat[0][0] == mat[1][1] && mat[1][1] == mat[2][2]) {
+				if (mat[0][i] != 0)
 				{
 					arr[0] = 0;
 					arr[1] = 0;
 					arr[2] = 2;
 					arr[3] = 2;
 					return arr;
-				};
-	    	if (mat[0][2] == mat[1][1] && mat[1][1] == mat[2][0])
-	    		if (mat[0][i] != 0)
+				}
+			}
+	    	if (mat[0][2] == mat[1][1] && mat[1][1] == mat[2][0]) {
+				if (mat[0][i] != 0)
 				{
 					arr[0] = 0;
 					arr[1] = 2;
@@ -173,16 +188,27 @@ public class PanelGame extends JComponent {
 					arr[3] = 0;
 					return arr;
 				}
+			}
     	}
     	return arr;
     }
+	
+	public void setJFrame(JFrame f)
+	{
+		try {
+			frame = f;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
     private void drawGame() {
     	g2.setColor(Color.WHITE);
     	g2.setStroke(new BasicStroke(3.0f));
     	int w = width/3;
     	int h = height/3;
-    	
+
     	for (int i=0; i<3; i++)
     	{
     		for (int j=0; j<3; j++)
@@ -195,20 +221,21 @@ public class PanelGame extends JComponent {
     			}
     		}
     	}
-    	
+
     	int win = winner();
     	if (win != 0)
     	{
- 
-    		g2.setColor(new Color(200, 150, 205));
+
+    		g2.setColor(new Color(181, 245, 186));
     		Font font = new Font("Serif", Font.PLAIN, 48);
     		g2.setFont(font);
     		int cord[] = winnerCord();
-    		
+
     		g2.drawLine(cord[0]*w+w/2, cord[1]*h+h/2, cord[2]*w+w/2, cord[3]*h+h/2);
-    		
-    		g2.setColor(new Color(102, 255, 102));
-    		g2.drawString(win==1?"player1 Win":"Player2 Win", width/2-110, height/2);
+
+    		g2.setColor(new Color(181, 245, 186));
+    		g2.drawString(win==1?"player 1 Win":"Player 2 Win", width/2-130, height/2);
+    		frame.setTitle(win==1?"player 1 Win":"Player 2 Win");
     		start = false;
     	}
     	if (cnt == 9 && win == 0)
@@ -219,9 +246,9 @@ public class PanelGame extends JComponent {
     		g2.drawString("DRAW", width/2-70, height/2);
     		start = false;
     	}
-    	
-    	
-        
+
+
+
     }
 
     private void render() {
